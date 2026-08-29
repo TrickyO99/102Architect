@@ -57,3 +57,19 @@ reflection matrix. The `translation()`, `homothety()`, `rotation()`, and `symmet
 functions only print the human-readable description line for each case. The matrix is then
 printed row by row, and applied to `(x, y)` in homogeneous coordinates:
 `x' = m0*x + m1*y + m2`, `y' = m3*x + m4*y + m5`.
+
+## Testing
+
+`test_102architect.py` is a pytest suite that runs the script as a subprocess and covers the
+documented examples above, boundary values (zero/negative/large coordinates, a full 360-degree
+rotation), and malformed input. Run it with:
+
+```
+python -m pytest test_102architect.py -v
+```
+
+**Bug fixed:** previously, a non-integer `x`/`y` (e.g. `python 102architect abc 4 -t 1 2`) or a
+transformation flag given without its required numeric operands (e.g. `python 102architect 3 4
+-t 1`) raised an unhandled `ValueError`/`IndexError` traceback and exited with code `1`, instead
+of the documented graceful exit code `84`. The argument parsing is now wrapped so both cases
+exit `84` cleanly, consistent with the missing-point-args case.
